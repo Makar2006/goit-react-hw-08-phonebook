@@ -1,6 +1,8 @@
 import { useSelector } from 'react-redux';
-import css from './ContactList.module.css';
+import { Navigate } from 'react-router-dom';
 import { selectIsLoggedIn } from '../../redux/authSelectors';
+
+import css from './ContactList.module.css';
 
 const ContactList = ({ onRemoveContact }) => {
   const { contacts } = useSelector(state => state.contacts);
@@ -11,40 +13,46 @@ const ContactList = ({ onRemoveContact }) => {
     if (filter === '') return contacts;
 
     return contacts.filter(({ name }) =>
-      name.toLowerCase().includes(filterText.toLowerCase())
+      name.toLowerCase().includes(filter.toLowerCase())
     );
   };
 
   const filteredContacts = onFilterContacts();
 
   return (
-    <ul className={css.contactList}>
-      {filteredContacts.length > 0 ? (
-        filteredContacts.map(({ name, id, number }) => (
-          <li
-            className={css.contactListItem}
-            key={id}
-            name={name}
-            id={id}
-            number={number}
-          >
-            <span className={css.itemSpan}>{name}:</span>
-            <span className={css.itemSpan}>{number}</span>
-            <button
-              className={css.deleteButton}
-              type="button"
-              onClick={() => onRemoveContact(id)}
-            >
-              Delete
-            </button>
-          </li>
-        ))
+    <>
+      {isLogedIn ? (
+        <ul className={css.contactList}>
+          {filteredContacts.length > 0 ? (
+            filteredContacts.map(({ name, id, number }) => (
+              <li
+                className={css.contactListItem}
+                key={id}
+                name={name}
+                id={id}
+                number={number}
+              >
+                <span className={css.itemSpan}>{name}:</span>
+                <span className={css.itemSpan}>{number}</span>
+                <button
+                  className={css.deleteButton}
+                  type="button"
+                  onClick={() => onRemoveContact(id)}
+                >
+                  Delete
+                </button>
+              </li>
+            ))
+          ) : (
+            <li>
+              <h2>Contact list is empty</h2>
+            </li>
+          )}
+        </ul>
       ) : (
-        <li>
-          <h2>Contact list is empty</h2>
-        </li>
+        <Navigate to="/login" replace />
       )}
-    </ul>
+    </>
   );
 };
 

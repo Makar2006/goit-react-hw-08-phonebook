@@ -1,7 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, Navigate } from 'react-router-dom';
-import { selectIsLoggedIn } from 'redux/auth/authSelectors';
+import { selectIsLoggedIn } from '../../redux/authSelectors';
+import css from './HomePage.module.css';
 
 const HomePage = () => {
   const isLogedIn = useSelector(selectIsLoggedIn);
@@ -10,8 +11,8 @@ const HomePage = () => {
   }
   return (
     <div>
-      <h1 className="title">PhoneBook</h1>
-      <div>
+      <h1>PhoneBook</h1>
+      <div className={css.container}>
         Please
         <NavLink to="/register">Register</NavLink>
         or

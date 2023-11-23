@@ -1,7 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { addContact } from '../../redux/contactsOperetions';
+import css from './ContactForm.module.css';
+import { addContact } from '../../redux/contactsOperations';
 
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -42,10 +43,11 @@ export default function ContactForm() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className={css.contactForm} onSubmit={handleSubmit(onSubmit)}>
         <label>
           <span>Contact name</span>
           <input
+            className={css.contactInput}
             type="text"
             placeholder="Contact's name"
             {...register('name', { required: true })}
@@ -55,13 +57,16 @@ export default function ContactForm() {
         <label>
           <span>Number</span>
           <input
+            className={css.contactInput}
             type="text"
             placeholder="Contact's number"
             {...register('number')}
           />
           <span>{errors.number?.message}</span>
         </label>
-        <button type="submit">Add</button>
+        <button className={css.formButton} type="submit">
+          Add
+        </button>
       </form>
     </div>
   );

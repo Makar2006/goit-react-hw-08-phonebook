@@ -1,30 +1,34 @@
-import { useDispatch, useSelector } from 'react-redux';
-import ContactForm from 'components/ContactForm/ContactForm';
-import ContactList from 'components/ContactList/ContactList';
-import Filter from 'components/Filter/Filter';
-import { removeContact } from 'redux/contactSlice';
+import { useDispatch } from 'react-redux';
+import { Route, Routes } from 'react-router-dom';
+import { Suspense, lazy, useEffect } from 'react';
+
+import { refreshUser } from '../redux/auth';
+
+import Loading from './Loader/Loader';
+const Layout = lazy(() => import('./Header/Header'));
+const HomePage = lazy(() => import('./pages/HomePage'));
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const ContactsPage = lazy(() => import('./pages/ContactsPage'));
 
 export default function App() {
-  const { contacts } = useSelector(state => state.contacts);
   const dispatch = useDispatch();
-
-  const onRemoveContact = id => {
-    dispatch(removeContact({ id }));
-  };
+  useEffect(() => {
+    dispatch(refreshUser());
+  }, [dispatch]);
 
   return (
-    <div>
-      <h1>Phonebook</h1>
-      <ContactForm />
-      <h2>Contacts</h2>
-      {contacts.length === 0 ? (
-        <h3>No contacts</h3>
-      ) : (
-        <>
-          <Filter />
-          <ContactList onRemoveContact={onRemoveContact} />
-        </>
-      )}
-    </div>
+    <>
+      <Suspense fallback={<Loading />}>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path="contacts" element={<ContactsPage />} />
+            <Route path="register" element={<RegisterPage />} />
+            <Route path="login" element={<LoginPage />} />
+          </Route>
+        </Routes>
+      </Suspense>
+    </>
   );
 }

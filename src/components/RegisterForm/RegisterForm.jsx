@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { signUp } from '../../redux/auth';
 import { toggleClick } from '../../redux/tooglePassword';
-import { selectIsLoggedIn } from '../../redux/authSelector';
+import { selectIsLoggedIn } from '../../redux/authSelectors';
+import css from './RegisterForm.module.css';
 
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -35,17 +36,17 @@ const RegisterForm = () => {
       .unwrap()
       .catch(err => {
         console.log(err);
-        notifyError('this profile is busy');
       });
   };
 
   return (
     <div>
       {isLogedIn && <Navigate to="/contacts" replace />}
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className={css.contactForm} onSubmit={handleSubmit(onSubmit)}>
         <label>
           <span>Name</span>
           <input
+            className={css.contactInput}
             type="text"
             placeholder="User Name"
             {...register('name', { required: true })}
@@ -55,6 +56,7 @@ const RegisterForm = () => {
         <label>
           <span>Email</span>
           <input
+            className={css.contactInput}
             type="email"
             placeholder="user@gmail.com"
             {...register('email', { required: true })}
@@ -64,13 +66,17 @@ const RegisterForm = () => {
         <label>
           <span>Password</span>
           <input
+            className={css.contactInput}
             type={toggleInput}
+            placeholder="********"
             {...register('password', { required: true })}
           />
           <span onClick={() => toggleClick(toggleInput, setToggleInput)}></span>
           <span>{errors.password?.message}</span>
         </label>
-        <button type="submit">Submit</button>
+        <button className={css.formButton} type="submit">
+          Submit
+        </button>
       </form>
     </div>
   );

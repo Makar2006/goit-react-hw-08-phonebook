@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
+import css from './LoginForm.module.css';
 import { login } from '../../redux/auth';
 import { selectIsLoggedIn } from '../../redux/authSelectors';
 import { toggleClick } from '../../redux/tooglePassword';
@@ -19,17 +20,17 @@ const LoginForm = () => {
       .unwrap()
       .catch(err => {
         console.log(err);
-        notifyError('Incorrect password or login');
       });
   };
 
   return (
     <div>
       {isLogedIn && <Navigate to="/contacts" replace />}
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className={css.contactForm} onSubmit={handleSubmit(onSubmit)}>
         <label>
           <span>Email</span>
           <input
+            className={css.contactInput}
             type="email"
             placeholder="user@gmail.com"
             {...register('email', { required: true })}
@@ -38,12 +39,16 @@ const LoginForm = () => {
         <label>
           <span>Password</span>
           <input
+            className={css.contactInput}
             type={toggleInput}
+            placeholder="********"
             {...register('password', { required: true })}
           />
           <span onClick={() => toggleClick(toggleInput, setToggleInput)}></span>
         </label>
-        <button type="submit">Submit</button>
+        <button className={css.formButton} type="submit">
+          Submit
+        </button>
       </form>
     </div>
   );
