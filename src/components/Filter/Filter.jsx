@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { setFilter } from 'redux/contactFilter';
+import { Input } from './Filter.styled';
+import { setFilter } from '../../redux/contactFilter';
 
 const Filter = () => {
   const { filter } = useSelector(state => state.filter);
@@ -7,8 +8,8 @@ const Filter = () => {
 
   return (
     <>
-      <input
-        placeholder="Search for"
+      <Input
+        placeholder="Search name"
         type="text"
         name="filter"
         value={filter}

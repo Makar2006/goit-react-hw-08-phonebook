@@ -11,7 +11,7 @@ const ContactList = ({ onRemoveContact }) => {
     const filterText = filter.toLowerCase();
 
     return contacts.filter(({ name }) =>
-      name.toLowerCase().includes(filterText)
+      name.toLowerCase().includes(filterText.toLowerCase())
     );
   };
 
