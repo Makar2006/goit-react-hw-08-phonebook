@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { selectIsLoggedIn, selectLoading } from '../../redux/authSelectors';
 
 import AuthMenu from 'components/Menu/Menu';
-import Loading from 'components/Loading/Loading';
+import Loading from 'components/Loader/Loader';
 import UserMenu from 'components/UserMenu/UserMenu';
 
 import './Header.css';

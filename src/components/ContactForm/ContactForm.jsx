@@ -1,60 +1,68 @@
-import { Formik, Field, Form } from 'formik';
-import { nanoid } from 'nanoid';
-import { addContact } from 'redux/contactSlice';
+import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { addContact } from '../../redux/contactsOperetions';
+
 import * as yup from 'yup';
-import css from './ContactForm.module.css';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+const schema = yup
+  .object({
+    name: yup.string().min(4).max(15).required(),
+    number: yup.string().min(5).max(18).required(),
+  })
+  .required();
 
 export default function ContactForm() {
-  const initialValues = { name: '', number: '' };
-  const dispatch = useDispatch();
-  const { contacts } = useSelector(state => state.contacts);
-
-  const validSchema = yup.object().shape({
-    name: yup.string().min(2).max(20).required(),
-    number: yup.string().min(8).max(20).required(),
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
   });
+  const { items } = useSelector(state => state.contacts);
 
-  const onSubmit = (values, { resetForm }) => {
-    const Duplicate = contacts.some(
-      contact => contact.name.toLowerCase() === values.name.toLowerCase()
-    );
-    if (Duplicate) {
-      alert(`${values.name} is already created`);
-    } else {
-      const newState = { id: nanoid(), ...values };
-      dispatch(addContact(newState));
-      resetForm();
+  const dispatch = useDispatch();
+
+  const onSubmit = data => {
+    if (
+      items.find(({ name }) => name.toLowerCase() === data.name.toLowerCase())
+    ) {
+      alert(`${data.name} is already in contacts`);
+      reset();
+      return;
     }
+
+    dispatch(addContact(data));
+
+    reset();
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={onSubmit}
-      validationSchema={validSchema}
-    >
-      <Form className={css.contactForm}>
-        <label htmlFor="nameId">Name</label>
-        <Field
-          className={css.contactInput}
-          type="text"
-          name="name"
-          placeholder="Contact name"
-          id="nameId"
-        />
-        <label htmlFor="numId">Number</label>
-        <Field
-          className={css.contactInput}
-          type="tel"
-          name="number"
-          placeholder="xxx-xxx-xx-xx"
-          id="numId"
-        />
-        <button type="submit" className={css.formButton}>
-          Add contact
-        </button>
-      </Form>
-    </Formik>
+    <div>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <label>
+          <span>Contact name</span>
+          <input
+            type="text"
+            placeholder="Contact's name"
+            {...register('name', { required: true })}
+          />
+          <span>{errors.name?.message}</span>
+        </label>
+        <label>
+          <span>Number</span>
+          <input
+            type="text"
+            placeholder="Contact's number"
+            {...register('number')}
+          />
+          <span>{errors.number?.message}</span>
+        </label>
+        <button type="submit">Add</button>
+      </form>
+    </div>
   );
 }
