@@ -9,7 +9,7 @@ import './index.css';
 import App from 'components/App';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <BrowserRouter basename="/react-homework-template">
+  <BrowserRouter basename="/goit-react-hw-08-phonebook">
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <App />
