@@ -4,6 +4,7 @@ import ContactForm from 'components/ContactForm/ContactForm';
 import ContactList from 'components/ContactList/ContactList';
 import { getContacts } from '../../redux/contactsOperations';
 import { selectIsLoggedIn } from '../../redux/authSelectors';
+import Filter from '../Filter/Filter';
 
 const ContactsPage = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const ContactsPage = () => {
   return (
     <>
       {isLogedIn && <ContactForm />}
+      <Filter />
       <ContactList />
     </>
   );

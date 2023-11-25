@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { Input } from './Filter.styled';
+// import css from './Filter.module.css'
 import { setFilter } from '../../redux/contactFilter';
 
 const Filter = () => {
@@ -8,7 +8,7 @@ const Filter = () => {
 
   return (
     <>
-      <Input
+      <input
         placeholder="Search name"
         type="text"
         name="filter"
